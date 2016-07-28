@@ -1,9 +1,13 @@
 {
     "plugins": [
-        "transform-decorators-legacy"
+        {{#is framework "react"}}
+        "transform-decorators-legacy"{{/is}}
+        {{#is framework "vue"}}
+        "transform-runtime"{{/is}}
     ],
     "presets": [
         "es2015",
+        "stage-2",
         "stage-0"{{#is framework "react"}},
         "react"{{/is}}
     ]{{#is framework "react"}},

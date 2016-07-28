@@ -1,0 +1,9 @@
+{
+    "files": [
+        {
+            "from": "transition.js.hbs",
+            "to": "src/app/transitions/{{name}}.js"
+        }
+    ],
+    "dependencies": []
+}

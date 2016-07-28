@@ -1,0 +1,24 @@
+// SideBar
+
+@import "~styles/vars";
+
+.SideBar
+    display block
+    position fixed
+    size 150px 100vh
+    left -150px
+    background-color $white
+    z-index 10000
+    color $black
+
+    .v-link-active
+        color $red
+
+.slide-transition
+    transition all 0.45s ease-out
+    left 0
+
+.slide-enter, .slide-leave
+    left -150px
+
+

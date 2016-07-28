@@ -1,0 +1,19 @@
+import AbstractView from "foo/core/pixi/AbstractView"
+
+export default class {{#camelize}}{{name}}{{/camelize}}View extends AbstractView {
+
+    init(){
+    }
+
+    open(){
+        this.opened.dispatch();
+    }
+
+    close(){
+        this.closed.dispatch();
+    }
+
+    destroy(){
+    }
+
+}

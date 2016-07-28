@@ -1,0 +1,17 @@
+{
+    "files": [
+        {
+            "from": "reducer.js.hbs",
+            "to": "src/app/reducers/{{name}}.js"
+        },
+        {
+            "from": "actions.js.hbs",
+            "to": "src/app/actions/{{name}}.js"
+        },
+        {
+            "from": "constants.js.hbs",
+            "to": "src/app/constants/{{name}}.js"
+        }
+    ],
+    "dependencies": []
+}

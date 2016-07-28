@@ -1,0 +1,14 @@
+import Vue from "vue"
+
+Vue.transition( "{{name}}", {
+    css           : false,
+    enter         : function ( el, done)  {
+        done();
+    },
+    enterCancelled: function ( el ) {},
+    leave         : function ( el, done ) {
+        done();
+    },
+    leaveCancelled: function ( el ) {}
+} )
+

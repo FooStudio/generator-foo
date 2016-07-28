@@ -1,0 +1,27 @@
+<style src="styles/views/{{#camelize}}{{name}}{{/camelize}}.styl" lang="stylus"></style>
+
+<script>
+    import store from "app/store"
+
+    export default{
+        name: "{{#camelize}}{{name}}{{/camelize}}",
+        data(){
+            return {}
+        },
+        props     : {},
+        components: {},
+        methods   : {},
+        computed  : {},
+        vuex      : {
+            actions: {},
+            getters: {}
+        },
+        store
+    }
+</script>
+
+<template>
+    <div class="{{#camelize}}{{name}}{{/camelize}}">
+
+    </div>
+</template>

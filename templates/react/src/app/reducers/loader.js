@@ -1,4 +1,4 @@
-import {LOADED, LOADING, PROGRESS} from "app/constants/loader"
+import {LOADING, PROGRESS} from "app/constants/loader"
 
 const initialState = {
     loading : false,

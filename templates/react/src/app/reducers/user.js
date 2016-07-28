@@ -18,6 +18,7 @@ import {
 
 const initialState = {
     logged        : false,
+    register_data : null,
     error         : null,
     access_token  : null,
     full_name     : null,

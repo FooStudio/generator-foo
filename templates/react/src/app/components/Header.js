@@ -9,7 +9,7 @@ export default class Header extends Component {
     }
 
     summonLoader ( e ) {
-        App.store.dispatch( loading(true) );;
+        App.store.dispatch( loading(true) );
     }
 
     render () {

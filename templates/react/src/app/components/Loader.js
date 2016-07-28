@@ -12,7 +12,7 @@ import {loading} from 'app/actions/loader'
 class Loader extends Component {
 
     static displayName = "Loader";
-    static propTypes   = {}
+    static propTypes   = {};
 
     componentWillReceiveProps (nextProps) {
         const {loading} = nextProps;
@@ -24,7 +24,7 @@ class Loader extends Component {
     }
 
     unsummonLoader ( e ) {
-        App.store.dispatch( loading(false) );;
+        App.store.dispatch( loading(false) );
     }
 
     render () {

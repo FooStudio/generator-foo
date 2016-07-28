@@ -9,11 +9,11 @@ import configureStore from "app/store"
 import {syncHistoryWithStore} from "react-router-redux"
 
 //REACT ROUTER
-import {Router, {{#if pushState}}browserHistory{{else}}hashHistory{{/if}} } from "react-router"
+import {Router, useRouterHistory} from "react-router"
+import {createHashHistory} from "history"
 import routes from "app/Routes"
 
-
-import AbstractApp from "foo/core/AbstractApp"
+import AbstractApp from "foo/core/react/ReactAbstractApp"
 
 export default class App extends AbstractApp {
 
@@ -24,7 +24,8 @@ export default class App extends AbstractApp {
 
     // Called just after inital data is loaded (locale/sdks/etc).
     init () {
-        this.history =  {{#if pushState}}syncHistoryWithStore(browserHistory, this.store);{{else}} syncHistoryWithStore(hashHistory, this.store);{{/if}}
+        const appHistory = useRouterHistory( createHashHistory )( { queryKey: false, hashType: 'hashbang'} )
+        this.history     = syncHistoryWithStore( appHistory, this.store )
         super.init();
     }
 

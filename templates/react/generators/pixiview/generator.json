@@ -1,0 +1,8 @@
+{
+    "files": [
+        {
+            "from": "view.js.hbs",
+            "to": "src/app/views/pixi/{{name}}View.js"
+        }
+    ]
+}

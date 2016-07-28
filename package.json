@@ -1,6 +1,6 @@
 {
   "name": "generator-foo",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Foo project scaffold generator based on generator-jam3 ",
   "main": "index.js",
   "scripts": {

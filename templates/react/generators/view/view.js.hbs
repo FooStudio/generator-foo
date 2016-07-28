@@ -1,0 +1,26 @@
+import "styles/views/{{#camelize}}{{name}}{{/camelize}}"
+import React, {PropTypes, Component} from "react"
+import {render} from "react-dom"
+import View from "foo/core/react/View"
+
+export default class {{#camelize}}{{name}}{{/camelize}} extends Component {
+
+    static displayName = "{{#camelize}}{{name}}{{/camelize}}";
+    static propTypes = {}
+
+    onRender(){
+
+    }
+
+    componentWillEnter(callback) {
+        callback();
+    }
+
+    componentWillLeave(callback) {
+        callback();
+    }
+
+    render() {
+        return (<div className="{{#camelize}}{{name}}{{/camelize}}"></div>)
+    }
+}

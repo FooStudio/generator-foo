@@ -4,21 +4,13 @@
  * Created by mendieta on 1/20/16.
  */
 
-import React from "react"
-import {render} from "react-dom"
-import Polyglot from "node-polyglot"
-import Requester from "foo/net/Requester"
-import Analytics from "foo/utils/Analytics"
 import Dispatcher from "app/Dispatcher"
-import {locale_changed, locale_loading, resize, started} from "foo/core/redux/actions"
-import {progress} from 'app/actions/loader'
 import {mainLoaderDisappear} from "app/animations/loader"
 import preloader from 'preloader'
+import Facebook from "foo/net/api/Facebook"
+import Google from "foo/net/api/Google"
 
 export default class AbstractApp {
-
-    static displayName = "AbstractApp";
-
     /**
      * @module foo
      * @namespace core
@@ -29,14 +21,7 @@ export default class AbstractApp {
      * @param {object} [data={}] App initial load data
      * @param {object} store App Redux store
      */
-    constructor ( config, environment, data = {}, store ) {
-        /**
-         * The App store
-         * @property store
-         * @type {Object}
-         */
-        this.store = store;
-
+    constructor ( config, environment, data = {} ) {
         /**
          * The app debug flasg
          * @property DEBUG
@@ -56,9 +41,9 @@ export default class AbstractApp {
          * @property analytics
          * @type {Analytics}
          *
-        this.analytics = null;
+         this.analytics = null;
 
-        /**
+         /**
          * App environment object
          * @property environment
          * @type {Object}
@@ -84,19 +69,20 @@ export default class AbstractApp {
          * @default "es-MX"
          * @type {string}
          */
-        this.locale = "es-MX";
+        this.locale = config.locale;
         /**
          * Loader
          * @default {}
          * @property data
          * @type {Object}
          */
-        this.loader = preloader({
-            xhrImages: false,
+        this.loader = preloader( {
+            xhrImages    : false,
             loadFullAudio: true,
             loadFullVideo: true
-        });
-        window.App = this;
+        } );
+        this.setLocale = this.setLocale.bind( this );
+        window.App     = this;
         this._setupAnalytics();
     }
 
@@ -109,9 +95,9 @@ export default class AbstractApp {
         if ( this.DEBUG ) this.startDebug();
         this._addListeners();
         this._initSDKs();
-        if (this.config.asset_loading) {
-            this.loader.on('progress', this.loaderProgress);
-            this.loader.on('complete', this.loaderComplete);
+        if ( this.config.asset_loading ) {
+            this.loader.on( 'progress', this.loaderProgress.bind( this ) );
+            this.loader.on( 'complete', this.loaderComplete.bind( this ) );
             this.loadAssets();
         } else {
             this.start();
@@ -120,63 +106,39 @@ export default class AbstractApp {
 
     /**
      * Method that init the Analytics helper
-     * @private
+     * @protected
+     * @override
      * @returns {void}
      */
     _setupAnalytics () {
-        this.analytics = new Analytics( "static/data/tracking.json", this.config.analytics, this._setupPolyglot() )
     }
 
     /**
      * Method that setups Polyglot, loads default locale
      * @private
+     * @override
      * @method _setupPolyglot
      * @returns {void}
      */
     _setupPolyglot () {
-        /**
-         * Polyglot instance
-         * @private
-         * @type {Polyglot}
-         */
-        this._polyglot = new Polyglot();
-        window.locale = this._polyglot;
-        window.$t     = ( key, options )=> {
-            return this._polyglot.t( key, options );
-        };
-        this._polyglot.locale( this.config.locale );
-        this._loadLocale();
     }
 
     /**
      * Method that loads the current locale and (re)renders the App
      * @private
+     * @override
      * @returns {void}
      */
     _loadLocale () {
-        Requester.getJSON( "static/data/locale/" + this._polyglot.locale() + ".json", ( error, data )=> {
-            if ( error ) {
-                console.log( error );
-                console.error( "Error: The provided locale was not found in the locales directory" );
-            } else {
-                this._polyglot.extend( data.body );
-                App.store.dispatch( locale_changed( this._polyglot.locale(), data.body ) )
-                if ( !this.started ) {
-                    this.init();
-                }
-            }
-        } );
     }
 
     /**
      * Method that set the current locale
+     * @override
      * @param {string} locale The locale to set as current
      * @returns {void}
      */
     setLocale ( locale ) {
-        App.store.dispatch( locale_loading() )
-        this._polyglot.locale( locale );
-        this._loadLocale();
     }
 
     /**
@@ -197,14 +159,21 @@ export default class AbstractApp {
     _initSDKs () {
         const { apis } = this.config;
         if ( apis.facebook ) {
-            console.log( "init facebook" );
+            Facebook.setup();
+        }
+        if ( apis.google ) {
+            Google.setup();
+        }
+        if ( apis.twitter ) {
+            //SETUP TWITTER API
         }
     }
 
     /**
      * Window resize event handler
      * @param {Event} e The event object
-     * @private
+     * @protected
+     * @override
      * @returns {void}
      */
     _onResizeHandler ( e ) {
@@ -218,7 +187,6 @@ export default class AbstractApp {
          * @type {Number}
          */
         this.height = window.innerHeight;
-        App.store.dispatch( resize( this.width, this.height ) );
     }
 
     /**
@@ -245,12 +213,12 @@ export default class AbstractApp {
     /**
      * Method to load all assets
      * @override
-     * @return {void
+     * @return {void}
      */
     loadAssets () {
-        this.data.global.map((item, i) => {
-            this.loader.add('/static/' + item);
-        })
+        this.data.global.map( ( item, i ) => {
+            this.loader.add( '/static/' + item );
+        } )
         this.loader.load();
     }
 
@@ -261,7 +229,6 @@ export default class AbstractApp {
      */
     start () {
         this.started = true;
-        App.store.dispatch( started() );
         mainLoaderDisappear();
         this.renderApp();
     }
@@ -271,18 +238,16 @@ export default class AbstractApp {
      * @override
      * @returns {void}
      */
-    loaderProgress = (prog) => {
-        App.store.dispatch( progress(prog) );
+    loaderProgress ( prog ) {
     }
-
 
     /**
      * Loader Complete
      * @override
      * @returns {void}
      */
-    loaderComplete = () =>{
-        console.info('Content Loaded');
+    loaderComplete () {
+        console.info( 'Content Loaded' );
         this.start();
     }
 

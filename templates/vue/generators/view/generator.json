@@ -1,0 +1,13 @@
+{
+    "files": [
+        {
+            "from": "view.vue.hbs",
+            "to": "src/app/views/{{name}}.vue"
+        },
+        {
+            "from": "view.styl.hbs",
+            "to": "src/styles/views/{{name}}.styl"
+        }
+    ],
+    "dependencies": []
+}
