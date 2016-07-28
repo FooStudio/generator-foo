@@ -80,9 +80,8 @@ var prompts = [
 var globs = [
     { base: "templates/{{framework}}" },
     { base: "templates/foo", output: "src/foo" },
-    { base: "templates", glob: "build/*" },
+    { base: "templates/assets", output: "src/assets" },
     { base: "templates/base" },
-    { base: "templates/styles", output: "src/styles" },
     { base: 'templates/unsupported/{{unsupported}}', output: 'static/' },
     { base: 'templates/unsupported/', glob: '*', output: 'static/' },
     { base: 'templates/unsupported/images/', output: 'static/img/unsupported/' }

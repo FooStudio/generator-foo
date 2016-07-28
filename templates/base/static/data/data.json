@@ -1,10 +1,9 @@
 {
-    "assets": [
+    "global": [
+        "data/data.json",
+        "data/tracking.json",
+        "img/logo.gif"
     ],
-    "sections": {
-        
-    },
-    "assets": [
-        ""
-    ]
+    "home": [],
+    "test": []
 }

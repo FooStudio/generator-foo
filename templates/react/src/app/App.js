@@ -24,7 +24,7 @@ export default class App extends AbstractApp {
 
     // Called just after inital data is loaded (locale/sdks/etc).
     init () {
-        this.history =  {{#if pushState}}syncHistoryWithStore(browserHistory, store);{{else}} syncHistoryWithStore(hashHistory, store);{{/if}}
+        this.history =  {{#if pushState}}syncHistoryWithStore(browserHistory, this.store);{{else}} syncHistoryWithStore(hashHistory, this.store);{{/if}}
         super.init();
     }
 
