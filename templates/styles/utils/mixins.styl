@@ -1,0 +1,93 @@
+/*----------------------------------------------------
+
+Mixins available:
+-   size                    - arguments: $width , $height
+-   border-radius-separate  - arguments: Top Left: 5px, Top Left: 5px, Bottom Left: 5px, Bottom Right: 5px
+-   outline radius          - arguments: Radius: 5px
+-   font-smoothing          - arguments:
+-   placeholder             - arguments:
+-   img-url                 - arguments:
+-   webfont                 - arguments:
+------------------------------------------------------------- */
+
+size($width, $height = $width)
+    width: $width
+    height: $height
+
+absoluteCenter() {
+    display block
+    position absolute
+    left 50%
+    top 50%
+    transform (translate(-50%, -50%))
+}
+
+placeholder()
+    &::-webkit-input-placeholder
+        {block}
+    &:-moz-placeholder
+        {block}
+    &::-moz-placeholder
+        {block}
+    &:-ms-input-placeholder
+        {block}
+
+font-smoothing() {
+    if current-property {
+        -webkit-{current-property}: arguments
+        if arguments == antialiased {
+            -moz-osx-{current-property}: grayscale
+        } else if arguments == subpixel-antialiased {
+            -moz-osx-{current-property}: auto
+        }
+        {current-property}: arguments
+    } else {
+        error('font-smoothing() must be used within a property');
+    }
+}
+
+border-radius-separate($topLeftRadius = 5px, $topRightRadius = 5px, $bottomLeftRadius = 5px, $bottomRightRadius = 5px) {
+    -webkit-border-top-left-radius: $topLeftRadius;
+    -webkit-border-top-right-radius: $topRightRadius;
+    -webkit-border-bottom-right-radius: $bottomRightRadius;
+    -webkit-border-bottom-left-radius: $bottomLeftRadius;
+
+    -moz-border-radius-topleft: $topLeftRadius;
+    -moz-border-radius-topright: $topRightRadius;
+    -moz-border-radius-bottomright: $bottomRightRadius;
+    -moz-border-radius-bottomleft: $bottomLeftRadius;
+
+    border-top-left-radius: $topLeftRadius;
+    border-top-right-radius: $topRightRadius;
+    border-bottom-right-radius: $bottomRightRadius;
+    border-bottom-left-radius: $bottomLeftRadius;
+}
+
+/* OUTLINE RADIUS */
+outline-radius($radius = 5px) {
+    -webkit-outline-radius: $radius;
+    -moz-outline-radius: $radius;
+    outline-radius: $radius;
+}
+
+img-url(file)
+    return url("~assets/img/" + file)
+
+font-url(file)
+    return 'assets/fonts/' + file
+
+webfont(family, file, hack-chrome-windows = false, weight = 'normal')
+    @font-face
+        font-family family
+        src url(font-url(file + '.eot'))
+        src url(font-url(file + '.eot?#iefix')) format('embedded-opentype')
+        src url(font-url(file + '.woff')) format('woff')
+        src url(font-url(file + '.ttf')) format('truetype')
+        src url(font-url(file + '.svg#' + family)) format('svg')
+        font-weight weight
+        font-style normal
+        if hack-chrome-windows
+            @media screen and (-webkit-min-device-pixel-ratio: 0)
+                @font-face
+                    font-family family
+                    src url(font-url(file + '.svg#' + family)) format('svg')

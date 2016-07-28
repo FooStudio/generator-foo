@@ -1,0 +1,30 @@
+{
+    "parser": "babel-eslint",
+    "extends": "foo",
+    "env": {
+        "browser": true,
+        "node": true
+    },
+    "plugins": [
+      "react"
+    ],
+    "globals": {
+        "App": true,
+        "System": true,
+        "$t": true,
+        "PIXI": true,
+        "Map": true,
+        "TweenMax": true,
+        "TweenLite": true,
+        "TimelineMax": true,
+        "TimelineLite": true,
+        "Sine": true,
+        "Power1": true,
+        "Power2": true,
+        "Power3": true,
+        "Power4": true,
+        "Back": true,
+        "Elastic": true,
+        "Linear": true
+    },
+}

@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+    <link rel="manifest" href="manifest.json">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="icon" sizes="124x124" href="favicon.png">
+    <!--<script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=all"></script>-->
+    <title>Foo()</title>
+
+    <meta property="og:title" content="">
+    <meta property="og:url" content="">
+    <meta property="og:type" content="">
+    <meta property="og:image" content="">
+    <meta property="og:description" content="">
+    <meta property="og:site_name" content="">
+    <meta property="fb:app_id" content="">
+
+    <meta name="twitter:card" content="">
+    <meta name="twitter:creator" content="">
+    <meta name="twitter:url" content="">
+    <meta name="twitter:title" content="">
+    <meta name="twitter:description" content="">
+    <meta name="twitter:image" content="">
+</head>
+
+<body>
+    <div id='main-loader'>
+        <h2> Loading </h2>
+    </div>
+    <!-- The app hooks into this div -->
+    <div id="root"></div>
+    <!-- Due to the way webpack works, a lot of magic happens in this file. HtmlWebpackPlugin automatically includes all assets (e.g. bundle.js, main.css) with the correct HTML tags, which is why they are missing in this HTML file. Check out webpackconfig.js if you want to know more. -->
+</body>
+
+</html>

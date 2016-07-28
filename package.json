@@ -1,0 +1,29 @@
+{
+  "name": "generator-foo",
+  "version": "1.0.0",
+  "description": "Foo project scaffold generator based on generator-jam3 ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://mendieta@github.com/FooStudio/generator-foo.git"
+  },
+  "keywords": [
+    "foo",
+    "project",
+    "scaffold",
+    "generator",
+    "nyg"
+  ],
+  "author": "Foo (Studio)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/FooStudio/generator-foo/issues"
+  },
+  "homepage": "https://github.com/FooStudio/generator-foo#readme",
+  "dependencies": {
+    "nyg": "^2.2.0"
+  }
+}
