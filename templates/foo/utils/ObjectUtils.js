@@ -13,7 +13,7 @@ export default class ObjectUtils {
      * @param {object} object The object
      * @returns {boolean} A boolean determining if the object has values
      */
-    static hasValues(object):boolean {
+    static hasValues(object) {
         if (object instanceof Array) return object.length > 0;
         for (let key in object) {
             if (object.hasOwnProperty(key)) {
@@ -31,7 +31,7 @@ export default class ObjectUtils {
      * @param {object} object The object
      * @returns {number} The length of elements in object
      */
-    static getLength(object):number {
+    static getLength(object) {
         let count = 0;
         for (let key in object) {
             count++;
@@ -47,7 +47,7 @@ export default class ObjectUtils {
      * @param {object} object The object to extract keys from
      * @returns {Array.<String>} The array of keys of the given object
      */
-    static getKeys(object):array {
+    static getKeys(object) {
         let keys = [];
         for (let key in object) {
             if (object.hasOwnProperty(key)) {
@@ -65,7 +65,7 @@ export default class ObjectUtils {
      * @param {object} object The object to extract values
      * @returns {Array} The array of values of the given object
      */
-    static getValues(object):array {
+    static getValues(object) {
         let values = [];
         for (let key in object) {
             if (object.hasOwnProperty(key)) {
@@ -83,7 +83,7 @@ export default class ObjectUtils {
      * @param {object} object The object to be checked
      * @returns {boolean} A boolean determining if the object has keys
      */
-    static hasKeys(object):boolean {
+    static hasKeys(object) {
         for (let key in object) {
             if (object.hasOwnProperty(key)) {
                 return true;

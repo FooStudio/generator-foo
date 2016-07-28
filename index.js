@@ -78,7 +78,7 @@ var prompts = [
 ];
 
 var globs = [
-    { base: "templates/{{framework}}" },
+    { base: "templates/{{framework}}" , template:false},
     { base: "templates/foo", output: "src/foo" },
     { base: "templates/assets", output: "src/assets" },
     { base: "templates/base" },

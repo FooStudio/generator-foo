@@ -6,7 +6,10 @@
         "node": true
     },
     "plugins": [
-      "react"
+        {{#is framework "react"}}
+      "react"{{/is}}
+        {{#is framework "vue"}}
+        "html"{{/is}}
     ],
     "globals": {
         "App": true,

@@ -10,7 +10,7 @@ import GoogleAnalytics from "foo/utils/tracking/GoogleAnalytics"
 
 //IMPORT APP UTILS
 import domready from "domready"
-import Breakpoints from "foo/utils/Breakpoints"
+import Breakpoints from "foo/utils/Breakpoint"
 import Requester from "foo/net/Requester"
 
 //IMPORT APP CONFIG
