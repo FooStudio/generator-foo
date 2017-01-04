@@ -1,74 +1,148 @@
+import loadJS from "load-script";
+
 /**
  * Helper static class for working with Google API
+ * @class Google
+ * @namespace net.apis
+ * @author Mendieta
  */
-
-import LoadJS from "foo/net/JSLoader"
-import store from "app/store"
-import {login, login_fail, login_sucess} from "app/actions/user"
-
 export default class Google {
-    static url      = "https://apis.google.com/js/client:plusone.js";
-    static params   = {
-        "clientid"    : null,
-        "callback"    : null,
-        "scope"       : "https://www.googleapis.com/auth/userinfo.email",
+    /**
+     * The Google SDK url;
+     * @property url
+     * @default "https://apis.google.com/js/client:plusone.js"
+     * @static
+     * @type {string}
+     */
+    static url = "https://apis.google.com/js/platform.js";
+
+    /**
+     * The default SDK params.
+     * @property params
+     * @static
+     * @type {{clientid: null, callback: null, scope: string, cookiepolicy: string}}
+     */
+    static params = {
+        "clientid": null,
+        "callback": null,
+        "scope": "https://www.googleapis.com/auth/plus.login",
         "cookiepolicy": "none"
-    }
-    static loaded   = false;
+    };
+
+    /**
+     * Variable determining if the SDK has been loaded.
+     * @property loaded
+     * @static
+     * @type {boolean}
+     */
+    static loaded = false;
+
+    /**
+     * Variable determining if the SDK has been inited.
+     * @property inited
+     * @static
+     * @type {boolean}
+     */
+    static inited = false;
+
+    /**
+     * The userData stored on static class.
+     * @property userData
+     * @static
+     * @type {Object}
+     */
     static userData = null;
 
-    static setup () {
-        this.load();
+    static resolve = null;
+
+    /**
+     * Setups the SDK
+     * @method setup
+     * @public
+     * @static
+     * @return {Promise}
+     */
+    static setup() {
+        return new Promise((resolve) => {
+            this.resolve = resolve;
+            this._load();
+        })
     }
 
-    static load () {
-        LoadJS( this.url, this.init.bind( this ) );
+    /**
+     * Loads the SDK.
+     * @method _load
+     * @private
+     * @static
+     */
+    static _load() {
+        loadJS(this.url, this._init.bind(this));
     }
 
-    static init () {
-        if ( !this.loaded ) return;
+    static GoogleAuth = null;
+    static GoogleUser = null;
 
-        this.loaded               = true;
-        this.params[ "clientid" ] = App.environment.properties.gp;
-        this.params[ "callback" ] = this.onLoginCallback
-    }
-
-    static login () {
-        if ( this.loaded ) {
-            login( store );
-            gapi.auth.signIn( this.params );
-        } else {
-            console.warn( "Google Plus:", "SDK not loaded" );
+    /**
+     * Initialize the SDK.
+     * @param {object} error The error that could occur loading the SDK.
+     * @private
+     * @static
+     */
+    static _init(error) {
+        if (error) {
+            throw new Error(`Google: Error loading SDK! - ${error}`);
         }
+        if (this.loaded) return;
+        gapi.load("auth2", () => {
+            this.loaded = true;
+            this.GoogleAuth = gapi.auth2.init({client_id: App.environment.properties.gp});
+            this.GoogleAuth.then(() => {
+                this.inited = true;
+                this.resolve();
+                this.resolve = null;
+            })
+        });
     }
 
-    static logout () {
-
+    /**
+     * Login method.
+     * @method login
+     * @public
+     * @static
+     */
+    static login(resolve, reject) {
+        if (!this.inited) throw new Error("Google SDK not loaded! call Google.setup() before login. You should enable the Google from the config file.");
+        this.GoogleAuth.signIn()
+            .then(() => {
+                this.GoogleUser = this.GoogleAuth.currentUser.get();
+                const prof = this.GoogleUser.getBasicProfile();
+                const profile = {
+                    id: prof.getId(),
+                    name: prof.getName(),
+                    given_name: prof.getGivenName(),
+                    family_name: prof.getFamilyName(),
+                    image_url: prof.getImageUrl(),
+                    email: prof.getEmail()
+                };
+                const auth = this.GoogleUser.getAuthResponse();
+                resolve({profile, auth});
+            })
+            .then(undefined, (error) => {
+                console.error(error);
+                reject(error);
+            })
     }
 
-    static onLoginCallback ( res ) {
-        if ( res[ "status" ][ "signed_in" ] ) {
-            this.getUserData( res[ "access_token" ] );
-        } else if ( res[ "error" ][ "access_denied" ] ) {
-            login_fail( state, res[ "error" ] )
-        }
+    /**
+     * The logout method.
+     * @method logout
+     * @public
+     * @static
+     */
+    static logout(resolve, reject) {
+        this.GoogleUser.disconnect();
+        this.GoogleUser = null;
+        resolve();
     }
 
-    static getUserData ( token ) {
-        gapi.client.load( "plus", "v1", ()=> {
-            let request = gapi.client.plus.people.get( { "userId": "me" } );
-            request.execute( ( res )=> {
-                let userData  = {
-                    access_token  : token,
-                    full_name     : res.displayName,
-                    social_id     : res.id,
-                    email         : res.emails[ 0 ] ? res.emails[ 0 ].value : false,
-                    profile_pic   : res.image.url,
-                    social_network: "google"
-                }
-                this.userData = userData;
-                login_sucess( store, userData );
-            } )
-        } );
-    }
 }

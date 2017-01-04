@@ -1,0 +1,6 @@
+[
+    "data/locale/*",
+    "img/**/*",
+    "video/**/*",
+    "audio/**/*"
+]

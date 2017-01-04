@@ -1,0 +1,11 @@
+{
+    "name": "Foo()",
+    "description": "The Foo() API: a multipurpose library",
+    "version": "1.0.0",
+    "url": "http://foostudio.mx",
+    "options": {
+        "outdir": "docs",
+        "paths": "src/foo",
+        "linkNatives": "true"
+    }
+}

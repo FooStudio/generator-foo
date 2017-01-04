@@ -37,61 +37,33 @@ var prompts = [
         name   : "framework",
         choices: [
             {
-                name   : "React",
-                value  : "react",
-                checked: true
-            },
-            {
                 name : "Vue",
-                value: "vue"
-            }
-        ]
-    },
-    {
-        type   : "confirm",
-        name   : "pixi",
-        message: "Will your project use pixi.js?",
-        default: false
-    },
-    {
-        type   : "list",
-        message: "How would you like to implement an unsupported page redirect?",
-        name   : "unsupported",
-        choices: [
-            {
-                name   : "None",
-                value  : "none",
-                checked: true
+                value: "vue",
+                checked:true
             },
             {
-                name : "PHP",
-                value: "php"
+                name   : "React",
+                value  : "react"
             }
         ]
-    },
-    {
-        type   : "confirm",
-        name   : "pushState",
-        message: "Use push states?",
-        default: false
     }
 ];
 
 var globs = [
-    { base: "templates/{{framework}}" , template:false},
-    { base: "templates/foo", output: "src/foo" },
+    { base: "templates/{{framework}}" , template:false}
+    /*{ base: "templates/foo", output: "src/foo" },
     { base: "templates/assets", output: "src/assets" },
     { base: "templates/base" },
     { base: 'templates/unsupported/{{unsupported}}', output: 'static/' },
     { base: 'templates/unsupported/', glob: '*', output: 'static/' },
-    { base: 'templates/unsupported/images/', output: 'static/img/unsupported/' }
+    { base: 'templates/unsupported/images/', output: 'static/img/unsupported/' }*/
 ]
 
 var gen = nyg( prompts, globs )
     .on( "postcopy", function () {
         var done = gen.async();
-        fs.rename( path.join( gen.cwd, 'gitignore' ), path.join( gen.cwd, '.gitignore' ), function () {
+        /*fs.rename( path.join( gen.cwd, 'gitignore' ), path.join( gen.cwd, '.gitignore' ), function () {
             gen.copy( 'templates/.babelrc', '.babelrc', done )
-        } )
+        } )*/
     } )
     .run();

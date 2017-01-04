@@ -1,0 +1,17 @@
+*.tmlanguage.cache
+*.tmPreferences.cache
+*.stTheme.cache
+*.sublime-workspace
+# *.sublime-project
+*.iml
+.idea/
+node_modules/
+dist/
+bower_components/
+docs/
+*.iws
+.idea_modules/
+.DS_Store
+._*
+npm-debug.log
+*.lock

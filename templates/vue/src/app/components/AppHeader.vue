@@ -1,47 +1,46 @@
 <style src="styles/components/AppHeader.styl" lang="stylus" scoped></style>
 
-<script>
-    import store from "app/store"
-    import {incrementCounter, decrementCounter} from "app/actions/counter"
-    import {loading} from "app/actions/loader"
+<script type="text/babel">
+
+    import {mapActions} from "vuex"
+    import {LOADING} from "app/store/modules/loader"
 
     export default{
+        name: "AppHeader",
         data(){
             return {}
         },
-        props     : {},
+        props: {},
         components: {},
-        methods   : {},
-        computed  : {},
-        vuex      : {
-            actions: {
-                increment: incrementCounter,
-                decrement: decrementCounter,
-                summonLoader: loading
-            },
-            getters: {}
+        methods: {
+            ...mapActions({
+                summonLoader: LOADING
+            })
         },
-        store
+        computed: {}
     }
+
+
 </script>
 
 <template>
     <div class="AppHeader">
-
-        <h1>Header</h1>
         <img src="~assets/img/logo.gif" alt="logo"/>
+        <transition name="fade" mode="out-in">
+            <span :key="$route.path">{{$route.path}}</span>
+        </transition>
         <nav>
-            <a v-link="{path: '/', exact: true}">Home</a>
-            <a v-link="{path: '/test'}">Test</a>
-            <a v-link="{path: '/404'}">404</a>
+            <router-link to="/">{{$t("home.title")}}</router-link>
+            <router-link to="/test">{{$t("test.title")}}</router-link>
+            <router-link to="/404">404</router-link>
         </nav>
 
         <ul>
             <li>
-                <button @click="$setLocale('es-mx')">es</button>
+                <button @click="$setLocale('es-MX')">es</button>
             </li>
             <li>
-                <button @click="$setLocale('en-us')">en</button>
+                <button @click="$setLocale('en-US')">en</button>
             </li>
             <li>
                 <button @click="summonLoader(true)">loader</button>

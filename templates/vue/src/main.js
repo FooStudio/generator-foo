@@ -1,12 +1,20 @@
-//IMPORT APP STYLES
+/*!
+ * Foo (Studio)
+ */
+
+
+//IMPORT GLOBAL CSS
 import "sanitize.css/sanitize.css"
 import "./main.styl"
 
+//IMPORT MODERNIZR
+import Modernizr from "modernizr"
+
 //IMPORT POLYFILLS
-require( 'es6-promise' ).polyfill();
+require('es6-promise').polyfill();
 
 //IMPORT ANALYTICS ADAPTERS
-import GoogleAnalytics from "foo/utils/tracking/GoogleAnalytics"
+import {load as LoadGA} from "foo/utils/tracking/GoogleAnalytics"
 
 //IMPORT APP UTILS
 import domready from "domready"
@@ -15,47 +23,62 @@ import Requester from "foo/net/Requester"
 
 //IMPORT APP CONFIG
 import {config, environment} from "./config"
+import Acknowledgements from "foo/utils/Acknowledgments"
 
-//STARTS APP
-const startApp = ( data = null ) => {
-    window.data = data;
-    require.ensure( [], ()=> {
-        //IMPORT TWEENMAX / CREATE / ETC
-        require( "gsap" ).TweenMax
+/**
+ *
+ * @param {Object} data
+ */
+const startApp = (data = null) => {
+    require.ensure([], () => {
+        //IMPORT TWEENMAX/CREATE/THREE/PLUGINS/ETC
+        require("gsap").TweenMax;
 
         //CREATE APP
-        const App = require( "app/App" ).default;
-        new App( config, environment, data );
-
-    }, "app" );
+        if (environment.vars.debug) console.info("Foo: Start App");
+        const App = require("app/App").default;
+        new App(config, environment, data);
+    }, "bundle")
 };
 
-//LOADS THE INITIAL APP DATA || STARTS THE APP
-const loadData             = ()=> {
-    //SETUP BREAKPOINTS
+/**
+ * Load the initial App data || Starts the app
+ */
+const loadData = () => {
+    //SETUP CSS BREAKPOINTS AND BROWSER MEDIA QUERIES
     Breakpoints.setup();
 
     //DO INITIAL DATA/ASSET LOADING || START APP
-    if ( config.data_loading ) {
-        console.info( "Foo:", "Load App Data" );
-        Requester.getJSON( "static/data/data.json", ( error, data )=> { startApp( data.body ); } );
+    if (config.data_loading) {
+        if (environment.vars.debug) console.info("Foo: Load App Data");
+        Requester.getJSON("static/data/data.json").then((response) => {
+            startApp(response.body)
+        }).then(undefined, (error) => {
+            throw new Error(`Foo start error: ${error}`)
+        })
     } else {
         startApp();
     }
-}
+};
+
 /**
- * LOADS THE ANALYTICS ADAPTER BASED ON CONFIG
+ * Load the analytics adapters based on config
  */
-const loadAnalyticsAdapter = ()=> {
-    switch ( config.analytics ) {
-        case "google":
-            GoogleAnalytics( environment.properties.ga );
-            break;
-        default:
+const loadAnalyticsAdapters = () => {
+    for (let adapter of config.analytics) {
+        switch (adapter) {
+            case "google":
+                LoadGA(environment.properties.ga);
+                break;
+            default:
+                console.warn(`Foo: no analytics adapter for ${adapter}`);
+                break;
+        }
     }
     loadData();
-}
+};
 
-domready( function () {
-    loadAnalyticsAdapter();
-} );
+domready(() => {
+    Acknowledgements.show();
+    loadAnalyticsAdapters();
+});

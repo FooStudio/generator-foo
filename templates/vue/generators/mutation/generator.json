@@ -1,9 +1,0 @@
-{
-  "files": [
-    {
-      "from": "mutation.js.hbs",
-      "to": "src/app/mutations/{{name}}.js"
-    }
-  ],
-  "dependencies": []
-}

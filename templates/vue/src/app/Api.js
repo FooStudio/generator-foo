@@ -1,46 +1,69 @@
+import Requester from "foo/net/Requester";
+
 /**
- * Created by mendieta on 7/15/16.
+ * @class Api
+ * @author Mendieta
  */
-
-import request from "superagent"
-import store from "app/store"
-import {login_fail, login_sucess, logout_fail, logout_success, register_fail, register_success} from "app/actions/user"
-
 export default class Api {
 
-    static login ( data ) {
-        request
-            .post( App.environment.urls.api + "user/login" )
-            .set( "Content-Type", "application/json" )
-            .set( "Accept", "application/json" )
-            .send( data )
-            .end( ( error, data )=> {
-                if ( error ) login_fail( store, error )
-                login_sucess( store, data.body )
-            } );
+
+    /**
+     * Login user
+     * @method
+     * @static
+     * @param {Object} data
+     */
+    static login(data) {
+        return new Promise((resolve, reject) => {
+            Requester.postJSON(this.apiURL("login"), data).then((response) => {
+                console.log("Login API success!");
+                resolve(response.body);
+            }).then(undefined, (error) => {
+                console.log("Login API error!");
+                reject(error);
+            });
+        })
     }
 
-    static register ( data ) {
-        request
-            .post( App.environment.urls.api + "user/register" )
-            .set( "Content-Type", "application/json" )
-            .set( "Accept", "application/json" )
-            .send( data )
-            .end( ( error, data )=> {
-                if ( error ) register_fail( store, error )
-                register_success( store, data.body )
-            } );
+    /**
+     * Log out the user
+     * @method
+     * @static
+     * @return Promise
+     */
+    static logout() {
+        return new Promise((resolve, reject) => {
+            Requester.postJSON(this.apiURL("logout"), data).then((response) => {
+                console.log("Login API success!");
+                resolve(response.body);
+            }).then(undefined, (error) => {
+                console.log("Login API error!");
+                reject(error);
+            });
+        })
     }
 
-    static logout ( data = null ) {
-        request
-            .post( App.environment.urls.api + "user/logout" )
-            .set( "Content-Type", "application/json" )
-            .set( "Accept", "application/json" )
-            .send( data )
-            .end( ( error, data )=> {
-                if ( error ) logout_fail( store, error )
-                logout_success( store )
-            } );
+    /**
+     * Register a new user
+     * @param {object} data
+     * @method
+     * @static
+     * @return Promise
+     */
+    static register(data) {
+        return new Promise((resolve, reject) => {
+            Requester.postJSON(this.apiURL("register"), data).then((response) => {
+                console.log("Register API success.");
+                resolve(response.body);
+            }).then(undefined, (error) => {
+                console.error("Register API error!");
+                reject(error);
+            })
+        });
+    }
+
+
+    static apiURL(endpoint) {
+        return `${App.environment.urls.api}${endpoint}`
     }
 }

@@ -1,0 +1,9 @@
+{
+  "files": [
+    {
+      "from": "module.js.hbs",
+      "to": "src/app/store/modules/{{name}}.js"
+    }
+  ],
+  "dependencies": []
+}

@@ -1,8 +1,6 @@
 <style src="styles/views/{{#camelize}}{{name}}{{/camelize}}.styl" lang="stylus"></style>
 
-<script>
-    import store from "app/store"
-
+<script type="text/babel">
     export default{
         name: "{{#camelize}}{{name}}{{/camelize}}",
         data(){
@@ -11,17 +9,10 @@
         props     : {},
         components: {},
         methods   : {},
-        computed  : {},
-        vuex      : {
-            actions: {},
-            getters: {}
-        },
-        store
+        computed  : {}
     }
 </script>
 
 <template>
-    <div class="{{#camelize}}{{name}}{{/camelize}}">
-
-    </div>
+    <div class="{{#camelize}}{{name}}{{/camelize}}"></div>
 </template>

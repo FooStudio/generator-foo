@@ -1,106 +1,123 @@
-var path = require('path')
-var config = require('../config')
-var utils = require('./utils')
-var projectRoot = path.resolve(__dirname, '../')
+var path        = require( 'path' )
+var config      = require( '../config' )
+var utils       = require( './utils' )
+var projectRoot = path.resolve( __dirname, '../' )
 
-var nib = require("nib");
-var rupture = require("rupture");
-var poststylus = require("poststylus");
-var rucksack = require("rucksack-css");
-var lost = require("lost");
+var env = process.env.NODE_ENV
+// check env & config/index.js to decide weither to enable CSS Sourcemaps for the
+// various preprocessor loaders added to vue-loader at the end of this file
+var cssSourceMapDev  = (env === 'development' && config.dev.cssSourceMap)
+var cssSourceMapProd = (env === 'production' && config.build.productionSourceMap)
+var useCssSourceMap  = cssSourceMapDev || cssSourceMapProd
+
+var nib        = require( "nib" );
+var rupture    = require( "rupture" );
+var poststylus = require( "poststylus" );
+var rucksack   = require( "rucksack-css" );
+var lost       = require( "lost" );
 
 module.exports = {
-  entry: {
-    main: './src/main.js'
-  },
-  output: {
-    path: config.build.assetsRoot,
-    publicPath: config.build.assetsPublicPath,
-    filename: '[name].js'
-  },
-  resolve: {
-    extensions: ['', '.js', '.vue'],
-    fallback: [path.join(__dirname, '../node_modules')],
-    modulesDirectories: ['src', 'node_modules', 'vendor', 'bower_components'],
-    alias: {
-      'src': path.resolve(__dirname, '../src'),
-      'assets': path.resolve(__dirname, '../src/assets')
-    }
-  },
-  resolveLoader: {
-    fallback: [path.join(__dirname, '../node_modules')]
-  },
-  module: {
-    preLoaders: [
-      {
-        test: /\.vue$/,
-        loader: 'eslint',
-        include: projectRoot,
-        exclude: /node_modules/
-      },
-      {
-        test: /\.js$/,
-        loader: 'eslint',
-        include: projectRoot,
-        exclude: /node_modules/
-      }
-    ],
-    loaders: [
-      {
-        test: /\.vue$/,
-        loader: 'vue'
-      },
-      {
-        test: /\.js$/,
-        loader: 'babel',
-        include: projectRoot,
-        exclude: /node_modules/
-      },
-      {
-        test: /\.json$/,
-        loader: 'json'
-      },
-      {
-        test: /\.html$/,
-        loader: 'vue-html'
-      },
-      {
-        test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
-        loader: 'url',
-        query: {
-          limit: 10000,
-          name: utils.assetsPath('img/[name].[ext]')
+    entry        : {
+        app: './src/main.js'
+    },
+    output       : {
+        path      : config.build.assetsRoot,
+        publicPath: process.env.NODE_ENV === 'production' ? config.build.assetsPublicPath : config.dev.assetsPublicPath,
+        filename  : '[name].js'
+    },
+    resolve      : {
+        extensions: [ '', '.js', '.vue' ],
+        fallback  : [ path.join( __dirname, '../node_modules' ) ],
+        alias     : {
+            'vue$'  : 'vue/dist/vue',
+            'src'   : path.resolve( __dirname, '../src' ),
+            'assets': path.resolve( __dirname, '../src/assets' ),
+            'app'   : path.resolve( __dirname, '../src/app' ),
+            'styles': path.resolve( __dirname, '../src/styles' ),
+            'foo'   : path.resolve( __dirname, '../src/foo' ),
+            modernizr$: path.resolve(__dirname, "../.modernizrrc")
+
         }
-      },
-      {
-        test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
-        loader: 'url',
-        query: {
-          limit: 10000,
-          name: utils.assetsPath('fonts/[name].[ext]')
-        }
-      }
-    ]
-  },
-  eslint: {
-    formatter: require('eslint-friendly-formatter')
-  },
-  vue: {
-    loaders: utils.cssLoaders(),
-  },
-  stylus: {
-    use: [
-      require('nib')(),
-      require("rupture")(),
-      require("poststylus")([
-        require("rucksack-css")({
-          autoprefixer: true,
-          fallbacks: true
-        }),
-        require("lost")()
-      ])
-    ],
-    import: ['~nib/lib/nib/index.styl', '~rupture/rupture/index.styl']
-  },
-  target: "web"
+    },
+    resolveLoader: {
+        fallback: [ path.join( __dirname, '../node_modules' ) ]
+    },
+    module       : {
+        preLoaders: [
+            {
+                test   : /\.vue$/,
+                loader : 'eslint',
+                include: projectRoot,
+                exclude: /node_modules/
+            },
+            {
+                test   : /\.js$/,
+                loader : 'eslint',
+                include: projectRoot,
+                exclude: /node_modules/
+            }
+        ],
+        loaders   : [
+            {
+                test  : /\.vue$/,
+                loader: 'vue'
+            },
+            {
+                test   : /\.js$/,
+                loader : 'babel',
+                include: projectRoot,
+                exclude: /node_modules/
+            },
+            {
+                test  : /\.json$/,
+                loader: 'json'
+            },
+            {
+                test: /\.modernizrrc.js$/,
+                loader: "modernizr"
+            },
+            {
+                test: /\.modernizrrc(\.json)?$/,
+                loader: "modernizr!json"
+            },
+            {
+                test  : /\.(png|jpe?g|gif|svg)(\?.*)?$/,
+                loader: 'url',
+                query : {
+                    limit: 10000,
+                    name : utils.assetsPath( 'img/[name].[ext]' )
+                }
+            },
+
+            {
+                test  : /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
+                loader: 'url',
+                query : {
+                    limit: 10000,
+                    name : utils.assetsPath( 'fonts/[name].[ext]' )
+                }
+            }
+        ]
+    },
+    eslint       : {
+        formatter: require( 'eslint-friendly-formatter' )
+    },
+    vue          : {
+        loaders: utils.cssLoaders( { sourceMap: useCssSourceMap } )
+    },
+    stylus       : {
+        use   : [
+            require( 'nib' )(),
+            require( "rupture" )(),
+            require( "poststylus" )( [
+                require( "rucksack-css" )( {
+                    autoprefixer: true,
+                    fallbacks   : true
+                } ),
+                require( "lost" )()
+            ] )
+        ],
+        import: [ '~nib/lib/nib/index.styl', '~rupture/rupture/index.styl' ]
+    },
+    target       : "web"
 }

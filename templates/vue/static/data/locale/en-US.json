@@ -1,0 +1,15 @@
+{
+    "view": "View",
+    "home": {
+        "title": "Home",
+        "subtitle": "This is the Home"
+    },
+    "test": {
+        "title": "Test",
+        "subtitle": "This a Test"
+    },
+    "notFound": {
+        "title": "404",
+        "subtitle": "Page Not Found"
+    }
+}
